@@ -1,0 +1,18 @@
+
+// Fonts
+/*@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");*/
+
+// Variables
+/*@import "variables";*/
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import '~startbootstrap-sb-admin/scss/sb-admin';
+@import '../../../bower_components/select2/src/scss/core';
+@import '~startbootstrap-sb-admin/vendor/font-awesome/scss/font-awesome';
+@import '../../../bower_components/knockout-daterangepicker/src/styles/daterangepicker';
+@import '~sweetalert2/src/sweetalert2';
+
+form{
+  width:100% !important;
+}

@@ -1,0 +1,25 @@
+{
+  "name": "promotionapprove",
+  "description": "Promotion Approvel",
+  "main": "",
+  "authors": [
+    "hchackzcrackzltd <hchackzcrackzltd@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "Promotion_Approvel"
+  ],
+  "homepage": "https://github.com/hchackzcrackzltd/promotionapprove",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "knockout-daterangepicker": "^0.1.0",
+    "select2": "^4.0.5"
+  }
+}
