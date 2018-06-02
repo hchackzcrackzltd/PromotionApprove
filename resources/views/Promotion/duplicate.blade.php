@@ -448,7 +448,8 @@ cust.on('select2:select', function(event) {
   cusb.select2({placeholder:'Select Branch',width:'100%'});
 });
 $("#period").daterangepicker({
-  minDate: moment().subtract(2, 'years'),
+  minDate: moment().subtract(5, 'years'),
+  maxDate: moment().add(5, 'years'),
   callback: function (startDate, endDate, period) {
     $(this).val(startDate.format('YYYY-MM-DD') + '/' + endDate.format('YYYY-MM-DD'));
   }

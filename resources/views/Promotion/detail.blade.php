@@ -68,7 +68,7 @@
                 <th id="gavgbth">{{number_format($data->load('Pro2')->Pro2->sum('avgp'),config('app.number_precision'))}}</th>
                 <th id="gsfcpcs">{{number_format($data->load('Pro2')->Pro2->sum('sfcpcs'),config('app.number_precision'))}}</th>
                 <th id="gsfcbth">{{number_format($data->load('Pro2')->Pro2->sum('sfcp'),config('app.number_precision'))}}</th>
-                <th id="gglowth">{{number_format((($data->load('Pro2')->Pro2->sum('sfcp')-$data->load('Pro2')->Pro2->sum('avgp'))/$data->load('Pro2')->Pro2->sum('avgp'))*100,config('app.number_precision'))}}</th>
+                <th id="gglowth">{{number_format(($data->load('Pro2')->Pro2->sum('avgp')>0)?(($data->load('Pro2')->Pro2->sum('sfcp')-$data->load('Pro2')->Pro2->sum('avgp'))/$data->load('Pro2')->Pro2->sum('avgp'))*100:0,config('app.number_precision'))}}</th>
               </tr>
             @endslot
             @forelse ($data->load(['Pro2','Pro2.descpro'])->Pro2->sortBy('seq') as $valuet1)
@@ -108,12 +108,12 @@
                 @php
                   $expcal=$data->load('Pro1')->Pro1->sum('value');
                 @endphp
-                <th>{{($expcal>0)?number_format(($expcal/$data->load('Pro2')->Pro2->sum('sfcp'))*100,config('app.number_precision')):0}}</th>
+                <th>{{($expcal>0)?number_format(($expcal>0)?($expcal/$data->load('Pro2')->Pro2->sum('sfcp'))*100:0,config('app.number_precision')):0}}</th>
               </tr>
               <tr>
                 <th colspan="2">Total Expenses:</th>
                 <th id="gtcomp">{{number_format(($data->load('Pro2')->Pro2->sum('tcomp')+$expcal),config('app.number_precision'))}}</th>
-                <th id="gts">{{number_format((($data->load('Pro2')->Pro2->sum('tcomp')+$expcal)/(($data->load('Pro2')->Pro2->sum('sfcp')>0)?$data->load('Pro2')->Pro2->sum('sfcp'):1))*100,config('app.number_precision'))}}</th>
+                <th id="gts">{{number_format(($data->load('Pro2')->Pro2->sum('sfcp')>0)?(($data->load('Pro2')->Pro2->sum('tcomp')+$expcal)/($data->load('Pro2')->Pro2->sum('sfcp')))*100:0,config('app.number_precision'))}}</th>
               </tr>
             @endslot
             @foreach ($data->load('Pro2')->Pro2->sortBy('seq') as $valuet2)
