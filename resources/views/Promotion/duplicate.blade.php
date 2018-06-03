@@ -102,7 +102,7 @@
           <th id="gavgbth">{{$data->Pro2->sum('avgp')}}</th>
           <th id="gsfcpcs">{{$data->Pro2->sum('sfcpcs')}}</th>
           <th id="gsfcbth">{{$data->Pro2->sum('sfcp')}}</th>
-          <th id="gglowth">{{number_format((($data->Pro2->sum('sfcp')-$data->Pro2->sum('avgp'))/$data->Pro2->sum('avgp'))*100,config('app.number_precision'))}}</th>
+          <th id="gglowth">{{number_format(($data->Pro2->sum('avgp')>0)?(($data->Pro2->sum('sfcp')-$data->Pro2->sum('avgp'))/$data->Pro2->sum('avgp'))*100:0,config('app.number_precision'))}}</th>
         </tr>
       @endslot
       @foreach ($data->Pro2->sortBy('seq') as  $t1)
@@ -138,12 +138,12 @@
           @php
             $expcal=$data->Pro1->sum('value');
           @endphp
-          <th id="caltotalexp_sfcp">{{number_format(($expcal>0)?($expcal/$data->Pro2->sum('sfcp'))*100:0,config('app.number_precision'))}}</th>
+          <th id="caltotalexp_sfcp">{{number_format(($data->Pro2->sum('sfcp')>0)?($expcal/$data->Pro2->sum('sfcp'))*100:0,config('app.number_precision'))}}</th>
         </tr>
         <tr>
           <th colspan="3">Total Expenses:</th>
           <th id="gtcomp">{{number_format(($data->Pro2->sum('tcomp')+$expcal),config('app.number_precision'))}}</th>
-          <th id="gts">{{number_format((($data->Pro2->sum('tcomp')+$expcal)/(($data->Pro2->sum('sfcp')>0)?$data->Pro2->sum('sfcp'):1))*100,config('app.number_precision'))}}</th>
+          <th id="gts">{{number_format(($data->Pro2->sum('sfcp')>0)?(($data->Pro2->sum('tcomp')+$expcal)/$data->Pro2->sum('sfcp'))*100:0,config('app.number_precision'))}}</th>
         </tr>
       @endslot
       @foreach ($data->Pro2->sortBy('seq') as  $t2)
@@ -274,6 +274,13 @@
           </div>
           <div class="col-12 text-right">
             <button type="button" name="button" class="btn btn-primary convet" data-uommin="" data-uommax="" data-convert="0" data-state="1"><i class="fa fa-retweet"></i> Convert</button>
+          </div>
+          <div class="col-12">
+            <fieldset class="form-group">
+              <label><b>Comp. Calculate By</b></label>&nbsp;&nbsp;&nbsp;&nbsp;
+              <label for="nmp"><b>Normal Price:</b> <input type="radio" name="compcb" id="nmp" value="0" checked/></label>&nbsp;&nbsp;
+              <label for="cexv"><b>Cost ExVat:</b> <input type="radio" name="compcb" id="cexv" value="1"/></label>
+            </fieldset>
           </div>
           <div class="col-12">
             <fieldset class="form-group">
@@ -582,11 +589,14 @@ $("#period").daterangepicker({
       }
     });
     $('#comp').on('cal', function(event) {
-      var prop=parseFloat($('#prop').val());
-      if (total.normal>0&&prop>0) {
-        total.comp=_.round(total.normal-prop,num_percis);
-      $('#comp').text(total.comp);
-      }else {
+      var prop=parseFloat($('#prop').val()),data=parseInt($('input[name=compcb]:checked').val());
+      if (data&&prop>0&&total.cost>0) {
+        total.comp=_.round(total.cost-prop,num_percis);
+        $('#comp').text(total.comp);
+      }else if (data===0&&prop>0&&total.normal>0){
+          total.comp=_.round(total.normal-prop,num_percis);
+          $('#comp').text(total.comp);
+      }else{
         total.comp=0;
         $('#comp').text(0);
       }
@@ -749,6 +759,10 @@ $("#period").daterangepicker({
     $('.uom').text('ชิ้น');
     $('#normalpr').val(0);
     $('#addmodel').modal('hide');
+  });
+  /*Add compensate choise*/
+  $('input[name=compcb]').on('change', function(event) {
+    $('#tnr').trigger('all');
   });
 });
 @endsection
