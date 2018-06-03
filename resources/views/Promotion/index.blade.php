@@ -257,6 +257,13 @@
           </div>
           <div class="col-12">
             <fieldset class="form-group">
+              <label><b>Comp. Calculate By</b></label>&nbsp;&nbsp;&nbsp;&nbsp;
+              <label for="nmp"><b>Normal Price:</b> <input type="radio" name="compcb" id="nmp" value="0" checked/></label>&nbsp;&nbsp;
+              <label for="cexv"><b>Cost ExVat:</b> <input type="radio" name="compcb" id="cexv" value="1"/></label>
+            </fieldset>
+          </div>
+          <div class="col-12">
+            <fieldset class="form-group">
               <label for="remark"><b>Remark</b></label>
               <textarea name="remark" class="form-control" rows="3" id="remarkitm"></textarea>
             </fieldset>
@@ -561,11 +568,14 @@ $("#period").daterangepicker({
       }
     });
     $('#comp').on('cal', function(event) {
-      var prop=parseFloat($('#prop').val());
-      if (total.normal>0&&prop>0) {
-        total.comp=_.round(total.normal-prop,num_percis);
-      $('#comp').text(total.comp);
-      }else {
+      var prop=parseFloat($('#prop').val()),data=parseInt($('input[name=compcb]:checked').val());
+      if (data&&prop>0&&total.cost>0) {
+        total.comp=_.round(total.cost-prop,num_percis);
+        $('#comp').text(total.comp);
+      }else if (data===0&&prop>0&&total.normal>0){
+          total.comp=_.round(total.normal-prop,num_percis);
+          $('#comp').text(total.comp);
+      }else{
         total.comp=0;
         $('#comp').text(0);
       }
@@ -728,6 +738,10 @@ $("#period").daterangepicker({
     $('.uom').text('ชิ้น');
     $('#normalpr').val(0);
     $('#addmodel').modal('hide');
+  });
+  /*Add compensate choise*/
+  $('input[name=compcb]').on('change', function(event) {
+    $('#tnr').trigger('all');
   });
 });
 @endsection

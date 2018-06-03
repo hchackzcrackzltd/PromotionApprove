@@ -108,7 +108,7 @@
                 @php
                   $expcal=$data->load('Pro1')->Pro1->sum('value');
                 @endphp
-                <th>{{($expcal>0)?number_format(($expcal>0)?($expcal/$data->load('Pro2')->Pro2->sum('sfcp'))*100:0,config('app.number_precision')):0}}</th>
+                <th>{{number_format(($data->load('Pro2')->Pro2->sum('sfcp')>0)?($expcal/$data->load('Pro2')->Pro2->sum('sfcp'))*100:0,config('app.number_precision'))}}</th>
               </tr>
               <tr>
                 <th colspan="2">Total Expenses:</th>
